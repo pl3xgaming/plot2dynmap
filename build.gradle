@@ -6,6 +6,7 @@ targetCompatibility = 1.8
 
 repositories {
     jcenter()
+    mavenLocal()
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "https://ci.athion.net/job/PlotSquared-Breaking/ws/mvn/" }
@@ -17,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.plotsquared:PlotSquared:5.1'
+    compile 'com.plotsquared:PlotSquared-Core:5.12.0'
     compile 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
     compile(group: 'com.sk89q.worldedit', name: 'worldedit-bukkit', version: '7.2.0-SNAPSHOT')
     compile('us.dynmap:dynmap:3.0-SNAPSHOT'){ transitive = false }

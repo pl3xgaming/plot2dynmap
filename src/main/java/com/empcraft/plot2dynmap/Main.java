@@ -6,7 +6,6 @@ import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.expiration.ExpireManager;
 import com.plotsquared.core.plot.flag.PlotFlag;
 import com.plotsquared.core.util.MainUtil;
-import com.plotsquared.core.util.uuid.UUIDHandler;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -193,11 +192,11 @@ public class Main extends JavaPlugin implements Listener {
                     List<Plot> plots = new ArrayList<>(PlotSquared.get().getPlots(w.getName()));
                     if (plots.size() > 4096) {
                         plots.sort((a, b) -> {
-                            PlotPlayer p1 = UUIDHandler.getPlayer(a.guessOwner());
-                            PlotPlayer p2 = UUIDHandler.getPlayer(b.guessOwner());
+                            PlotPlayer p1 = PlotSquared.imp().getPlayerManager().getPlayerIfExists(a.getOwnerAbs());
+                            PlotPlayer p2 = PlotSquared.imp().getPlayerManager().getPlayerIfExists(b.getOwnerAbs());
                             if (p1 == p2) {
-                                long l1 = ExpireManager.IMP.getAge(a.guessOwner());
-                                long l2 = ExpireManager.IMP.getAge(b.guessOwner());
+                                long l1 = ExpireManager.IMP.getAge(a.getOwnerAbs());
+                                long l2 = ExpireManager.IMP.getAge(b.getOwnerAbs());
                                 if (l1 == l2) {
                                     return Math.abs(a.hashCode()) - Math.abs(b.hashCode());
                                 }
@@ -220,7 +219,7 @@ public class Main extends JavaPlugin implements Listener {
                         plots = plots.subList(0, 4096);
                     }
                     for (final Plot plot : plots) {
-                        String owner = MainUtil.getName(plot.guessOwner());
+                        String owner = MainUtil.getName(plot.getOwnerAbs());
                         if (owner == null) {
                             owner = "unknown";
                         }
@@ -384,7 +383,7 @@ public class Main extends JavaPlugin implements Listener {
         }
         this.updatePeriod = per * 20;
         this.stop = false;
-        getServer().getScheduler().scheduleSyncDelayedTask(this, new Plot2Update(), 420);
+        getServer().getScheduler().scheduleAsyncDelayedTask(this, new Plot2Update(), 420);
     }
 
     private static final class AreaStyle {
